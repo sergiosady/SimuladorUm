@@ -1,45 +1,109 @@
-const repassesGov = require('../data/dados-gov.json');      //Recebendo dados em JSON, transformando em Array JS(parse) E guardando em uma variável
+//Recebendo dados do .JSON > Parse para Array > guardando em uma variável
+const repassesGov = require('../data/dados-gov.json');
 
 
-const orgaosComSucesso = [
-  ...new Set(
-    repassesGov.filter(elemento => elemento.status === "sucesso").map(elemento => elemento.orgao)
-  )
-];
 
-function totalDeRepasses() {
-  console.log(`Total de repasses processados: ${repassesGov.length}`);
-};
+function gerarRelatorio(filtros, acao) {
+  const dadosFiltrados = pesquisaComFiltros(filtros);
 
-function repassesBemSucedidos() {
-  return console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(elemento => elemento.status === "sucesso").length}`);
-}
+  console.log(`\n--- Relatório ---`);
 
-function quantidaOrgaosComSucesso(orgaosComSucesso, repassesGov) {
-  for (i = 0; i < orgaosComSucesso.length; i++) {
-    let total = repassesGov.filter(elemento => elemento.status === "sucesso" && elemento.orgao === orgaosComSucesso[i]).length;
-    console.log(`${orgaosComSucesso[i]}: ${total}`)
+  switch (acao) {
+    case 'imprimir':
+    case 'filtrar': //Imprime a lista filtrada
+      console.log(`Itens encontrados: ${dadosFiltrados.length}`);
+      return console.log(dadosFiltrados);
+
+    case 'somarValor': //Calcula o valor total
+      if (dadosFiltrados.length === 0) {
+        return console.log('Nenhum repasse encontrado para calcular.');
+      }
+
+      const valorTotal = dadosFiltrados.reduce((total, repasse) => {
+        return total + repasse.valor;
+      }, 0);
+
+      console.log(`Itens somados: ${dadosFiltrados.length}`);
+      // toFixed(2) para formatar como moeda (duas casas decimais)
+      return console.log(`VALOR TOTAL REPASSADO: R$ ${valorTotal.toFixed(2)}`);
+
+    case 'listarUnicos': // HU3: Lista os órgãos únicos
+      const orgaosUnicos = [
+        ...new Set(
+          repassesGov.map(elemento => elemento.orgao) // Usa a lista COMPLETA
+        )
+      ];
+      console.log('Órgãos ÚNICOS encontrados no sistema:');
+      return console.log(orgaosUnicos);
+
+    default:
+      console.log('Ação não reconhecida. Use: "imprimir", "somarValor" ou "listarUnicos".');
+      return [];
   }
-};
-
-function valorTotalRepassesValidos() {
-  return console.log(`Valor Total: R$ ${repassesGov.filter(elemento => elemento.status === "sucesso").reduce((acumulador, elemento) => acumulador + elemento.valor, 0)}`);
 }
 
-function valorPorOrgaoSucesso() {
-  for (i = 0; i < orgaosComSucesso.length; i++) {
-    console.log(`${orgaosComSucesso[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === orgaosComSucesso[i]).reduce((acumulador, elemento) => acumulador + elemento.valor, 0)}`);
+function pesquisaComFiltros(filtros) {
+  let resultado = repassesGov;
+
+  for (chave in filtros) {
+    const valorFiltro = filtros[chave];
+    switch (chave) {
+      case 'orgao':
+        if (valorFiltro !== 'Todos') {
+          resultado = resultado.filter(filtroOrgao(valorFiltro));
+        }
+        break;
+
+      case 'status':
+        resultado = resultado.filter(filtroStatus(valorFiltro));
+        break;
+
+      case 'data':
+        resultado = resultado.filter(filtroData(valorFiltro));
+        break;
+
+      case 'valor':
+        resultado = resultado.filter(filtroValor(valorFiltro));
+        break;
+
+      case 'motivo':
+        resultado = resultado.filter(filtroMotivo(valorFiltro));
+        break;
+
+      default:
+        break;
+    }
   }
+
+  return resultado;
 }
 
-function resumoRepassesBemSucedidos() {
-  repassesBemSucedidos();
-  quantidaOrgaosComSucesso(orgaosComSucesso, repassesGov);
-  valorTotalRepassesValidos();
-  valorPorOrgaoSucesso()
-};
+//FILTROS  PARA CADA TIPO DE VALOR DA PROPRIEDADE
+function filtroValor(campoValor) {
+  return (elemento) => elemento.valor === campoValor;
+}
 
+function filtroStatus(campoStatus) {
+  return (elemento) => elemento.status === campoStatus;
+}
+
+function filtroOrgao(campoOrgao) {
+  return (elemento) => elemento.orgao === campoOrgao;
+}
+
+function filtroData(campoData) {
+  return (elemento) => elemento.data === campoData;
+}
+
+function filtroMotivo(campoMotivo) {
+  return (elemento) => elemento.data === campoMotivo;
+}
+
+//gerarRelatorioSimulador({ 'orgao': 'Todos', 'status': 'sucesso' }, 'somarValor');
+
+
+//EXPORTANDO FUNÇÕES PARA SIMULADOR
 module.exports = {
-  totalDeRepasses,
-  resumoRepassesBemSucedidos,
-};
+  gerarRelatorio,
+}
+
