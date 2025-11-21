@@ -6,7 +6,7 @@ const repassesGov = require('../data/dados-gov.json');
 function gerarRelatorio(filtros, acao) {
   const dadosFiltrados = pesquisaComFiltros(filtros);
 
-  console.log(`\n--- Relatório ---`);
+  console.log(`--- Relatório ---`);
 
   switch (acao) {
     case 'imprimir':
@@ -24,18 +24,17 @@ function gerarRelatorio(filtros, acao) {
       }, 0);
 
       console.log(`Itens somados: ${dadosFiltrados.length}`);
-      // toFixed(2) para formatar como moeda (duas casas decimais)
       return console.log(`VALOR TOTAL REPASSADO: R$ ${valorTotal.toFixed(2)}`);
 
-    case 'listarUnicos': // HU3: Lista os órgãos únicos
+    case 'listarUnicos': // Lista os órgãos sem duplicidade
       const orgaosUnicos = [
         ...new Set(
-          repassesGov.map(elemento => elemento.orgao) // Usa a lista COMPLETA
+          repassesGov.map(elemento => elemento.orgao)
         )
       ];
       console.log('Órgãos ÚNICOS encontrados no sistema:');
       return console.log(orgaosUnicos);
-
+    
     default:
       console.log('Ação não reconhecida. Use: "imprimir", "somarValor" ou "listarUnicos".');
       return [];
@@ -49,7 +48,7 @@ function pesquisaComFiltros(filtros) {
     const valorFiltro = filtros[chave];
     switch (chave) {
       case 'orgao':
-        if (valorFiltro !== 'Todos') {
+        if (valorFiltro !== 'Todos' || valorFiltro !== 'todos') {
           resultado = resultado.filter(filtroOrgao(valorFiltro));
         }
         break;
@@ -98,9 +97,6 @@ function filtroData(campoData) {
 function filtroMotivo(campoMotivo) {
   return (elemento) => elemento.data === campoMotivo;
 }
-
-//gerarRelatorioSimulador({ 'orgao': 'Todos', 'status': 'sucesso' }, 'somarValor');
-
 
 //EXPORTANDO FUNÇÕES PARA SIMULADOR
 module.exports = {

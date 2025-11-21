@@ -1,13 +1,21 @@
-/*LOGICA ANTIGA, DECIDI REFAZER COM UMA LOGICA E 
-ESCALABILIDADE MELHOR APÓS DIAS ITERANDO.
-
-DEIXEI APENAS PARA FINS EDUCACIONAIS
-*/
 const repassesGov = require('../data/dados-gov.json');
 
+let listaOrgaosDeSucesso = [
+  ...new Set(
+    repassesGov.filter(elemento => elemento.status === "sucesso").map(elemento => elemento.orgao)
+  )
+];
+
+let listaOrgaosPorFalha = [
+  ...new Set(
+    repassesGov.filter(elemento => elemento.status === 'falha').map(elemento => elemento.orgao)
+  )
+];
+
+//RESUMO DE REPASSES VALIDOS
 totalDeRepasses();
 repassesBemSucedidos();
-quantidaOrgaosComSucesso();
+quantidaPorOrgaosComSucesso();
 valorTotalEmRepassesValidos();
 valorPorOrgaoSucesso();
 
@@ -16,32 +24,64 @@ function totalDeRepasses() {
 }
 
 function repassesBemSucedidos() {
-  return console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(elemento => elemento.status === "sucesso").length}`);
+  console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(elemento => elemento.status === "sucesso").length}`);
 }
 
-function quantidaOrgaosComSucesso() {
-  const orgaosDeSucesso = [
-    ...new Set(
-      repassesGov.filter(elemento => elemento.status === "sucesso").map(elemento => elemento.orgao)
-    )
-  ]
-  for (i = 0; i < orgaosDeSucesso.length; i++) {
-    let total = repassesGov.filter(elemento => elemento.status === "sucesso" && elemento.orgao === orgaosDeSucesso[i]).length;
-    console.log(`${orgaosDeSucesso[i]}: ${total}`)
+function quantidaPorOrgaosComSucesso() {
+  console.log('Por orgão:')
+  for (i = 0; i < listaOrgaosDeSucesso.length; i++) {
+    let total = repassesGov.filter(elemento => elemento.status === "sucesso" && elemento.orgao === listaOrgaosDeSucesso[i]).length;
+    console.log(`${listaOrgaosDeSucesso[i]}: ${total}`)
   }
 }
 
 function valorTotalEmRepassesValidos() {
-  return console.log(`Valor Total: R$ ${repassesGov.filter(elemento => elemento.status === "sucesso").reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
+  console.log(`Valor total: R$ ${repassesGov.filter(elemento => elemento.status === "sucesso").reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
 }
 
 function valorPorOrgaoSucesso() {
-  const orgaosDeSucesso = [
-    ...new Set(
-      repassesGov.filter(elemento => elemento.status === "sucesso").map(elemento => elemento.orgao)
-    )
-  ]
-  for (i = 0; i < orgaosDeSucesso.length; i++) {
-    console.log(`${orgaosDeSucesso[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === orgaosDeSucesso[i]).reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
+  console.log('Por orgão:')
+  for (i = 0; i < listaOrgaosDeSucesso.length; i++) {
+    console.log(`${listaOrgaosDeSucesso[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === listaOrgaosDeSucesso[i]).reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
   }
+}
+
+//RESUMO DE FALHAS
+repassesComFalha();
+quantidadeDeFalhasPorOrgao();
+totalFalhasComMotivo();
+valorTotalEmFalhas();
+valorFalhasPorOrgao();
+valorFalhasComMotivo();
+
+function repassesComFalha() {
+  console.log(`Total de repasses com falha: ${repassesGov.filter(elemento => elemento.status === 'falha').length}`);
+}
+
+function quantidadeDeFalhasPorOrgao() {
+  console.log('Por orgão:')
+  for (i = 0; i < listaOrgaosPorFalha.length; i++) {
+    let total = repassesGov.filter(elemento => elemento.status === 'falha' && elemento.orgao === listaOrgaosPorFalha[i]).length;
+    console.log(`${listaOrgaosPorFalha[i]}: ${total}`)
+  }
+}
+
+function totalFalhasComMotivo() {
+  console.log(`Total de falhas com motivo: ${repassesGov.filter(elemento => elemento.motivo).length}`);
+}
+
+function valorTotalEmFalhas() {
+  console.log(`Valor total em falhas: R$ ${repassesGov.filter(elemento => elemento.status === 'falha').reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
+
+}
+
+function valorFalhasPorOrgao() {
+  console.log('Por orgão:')
+  for (i = 0; i < listaOrgaosPorFalha.length; i++) {
+    console.log(`${listaOrgaosPorFalha[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === listaOrgaosPorFalha[i]).reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
+  }
+}
+
+function valorFalhasComMotivo() {
+  console.log(`Valor total em falhas com motivo: R$ ${repassesGov.filter(elemento => elemento.motivo).reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
 }
