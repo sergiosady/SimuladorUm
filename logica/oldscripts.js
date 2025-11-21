@@ -85,3 +85,24 @@ function valorFalhasPorOrgao() {
 function valorFalhasComMotivo() {
   console.log(`Valor total em falhas com motivo: R$ ${repassesGov.filter(elemento => elemento.motivo).reduce((acumulador, elemento) => acumulador + elemento.valor, 0).toFixed(2)}`);
 }
+
+repasseMaiorValor();
+repasseMenorValor();
+diaComMaisRepasses();
+
+function repasseMaiorValor() {
+  let valorOrganizadoCrescente = repassesGov.sort((elementoA, elementoB) => elementoB.valor - elementoA.valor);
+  console.log("Repasse com maior valor:");
+  console.log(valorOrganizadoCrescente[0]);
+}
+
+function repasseMenorValor() {
+  let valorOrganizadoCrescente = repassesGov.sort((elementoA, elementoB) => elementoB.valor - elementoA.valor);
+  console.log("Repasse com menor valor:");
+  console.log(valorOrganizadoCrescente[valorOrganizadoCrescente.length - 1]);
+}
+
+function diaComMaisRepasses() {
+  let diaMaisRepasses = repassesGov.filter(elemento => elemento.data).filter(elemento => elemento.valor);
+  console.log(diaMaisRepasses);
+}
