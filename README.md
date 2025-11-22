@@ -1,8 +1,7 @@
 ALUNO: Sérgio Sady Monteiro Ferreira
+
 Para que o Simulador consiga ser executado, todas as pastas são nescessárias(data, logica e simulador).
 
-Simulator Télos - Nível 1 (Versionamento Semântico, GIT, JSON & Javascript)
-Sejam muito bem-vindos ao Simulator - Nível 1! Neste nível você teve a oportunidade de aprender sobre Versionamento Semântico, GitHub, GIT, Configuração de Ambiente Dev, Introdução ao JavaScript, Funções, Manipulação de Arrays e Objetos,JSON e Promises.
 
 SIMULADOR NÍVEL 1 - Atividades
 1) História de Usuário 1: Recebimento e Exibição de Dados do Governo.
