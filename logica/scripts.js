@@ -286,7 +286,7 @@ function historiaSeis(campoOrgao) {
   resultadosValidos(campoOrgao);
 }
 
-//EXPORANTO FUNÇÕES PARA EXECUÇÃO EM OUTRO ARQUIVO (simulando.js)
+//EXPORTANTO FUNÇÕES PARA EXECUÇÃO EM OUTRO ARQUIVO (simulando.js)
 module.exports = {
   historiaUm,
   historiaDois,
