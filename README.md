@@ -1,3 +1,5 @@
+Leia este README em forma de codigo
+
 ALUNO: Sérgio Sady Monteiro Ferreira
 
 Para que o Simulador consiga ser executado, todas as pastas são nescessárias(data, logica e simulador).
