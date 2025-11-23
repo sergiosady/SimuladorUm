@@ -1,4 +1,4 @@
-### Este simulador necessita das 3 pastas(data, logica e simulador) para ser executado
+### Execute pelo arquivo "simulando.js"
 
 ### Simulator Télos - Nível 1 (Versionamento Semântico, GIT, JSON & Javascript)
 
