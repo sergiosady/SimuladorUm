@@ -3,7 +3,7 @@ const repassesGovTwist = require('../data/dados-gov-twist.json');
 
 // ALUNO: SERGIO SADY MONTEIRO FERREIRA
 
-// GERANDO LISTA DE ORGAOS PARA MOSTRAR VISUALMENTE (Sem duplicidade)
+// GERANDO LISTA DE ORGAOS (Sem duplicidade)
 let listaDeOrgaosComSucesso = [
   ...new Set(
     repassesGov.filter(filtroStatus('sucesso')).map(elemento => elemento.orgao)
@@ -90,7 +90,7 @@ function valorFalhasComMotivo() {
 }
 
 // REQUISITOS HISTÓRIA 3 - Estatísticas de Repasses por critérios 
-// ODENA ARRAY E PEGA RESULTADO
+// ORDENA ARRAY E PEGA RESULTADO
 function repasseMaiorValor() {
   console.log("Repasse de maior valor:");
   console.table(ordenarCrescente('valor')[0]);
@@ -286,7 +286,7 @@ function historiaSeis(campoOrgao) {
   resultadosValidos(campoOrgao);
 }
 
-//EXPORTANTO FUNÇÕES PARA EXECUÇÃO EM OUTRO ARQUIVO (simulando.js)
+// EXPORTANTO FUNÇÕES PARA EXECUÇÃO EM OUTRO ARQUIVO (simulando.js)
 module.exports = {
   historiaUm,
   historiaDois,
