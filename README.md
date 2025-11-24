@@ -1,4 +1,4 @@
-### Execute pelo arquivo "simulando.js"
+### Execute pelo arquivo ./simulador/simulando.js
 
 ### Simulator Télos - Nível 1 (Versionamento Semântico, GIT, JSON & Javascript)
 
