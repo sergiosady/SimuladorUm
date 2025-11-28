@@ -162,7 +162,7 @@ function resultadosValidos(campoOrgao) {
   console.log(`Quantidade de repasses ajustada(repasses válidos): ${repassesProntos.length}`);
   console.log('Transações inválidas removidas: ' + repassesInvalidados.length);
 
-  const listaDeOrgaoEscolhido = repassesAjustados.filter(filtrarOrgaoPorNome(campoOrgao));
+  const listaDeOrgaoEscolhido = repassesProntos.filter(filtrarOrgaoPorNome(campoOrgao));
   const numeroRepasses = listaDeOrgaoEscolhido.length;
   const valorTotal = listaDeOrgaoEscolhido.reduce(reduceSomarValores(), 0);
   const repassesValidos = listaDeOrgaoEscolhido.filter(filtrarPorStatus('sucesso'));
