@@ -1,6 +1,6 @@
 import { historiaUm, historiaDois, historiaTres, historiaQuatro, historiaCinco, historiaSeis } from '../logica/scripts.js';
 
-  //EXECUTAR CÓDIGO POR AQUI.
+  //Execução do simulador nível 1.
 
 simuladorNivelUm();                  
 
@@ -14,7 +14,7 @@ async function simuladorNivelUm() {
     historiaTres();       
     await delay(tempoDeEpera);
 
-    historiaQuatro('MEC');       //É POSSÍVEL TESTAR COM OUTRO NOME DE ÓRGÃO EX: Polícia Civil, Corpo de Bombeiros
+    historiaQuatro('MEC');       //É possível escolher o nome do órgão, ex: Polícia Civil, Corpo de Bombeiros
     await delay(tempoDeEpera);
 
     historiaCinco();      
