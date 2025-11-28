@@ -22,7 +22,7 @@ function repassesBemSucedidos() {
   console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(filtrarPorStatus('sucesso')).length}`);
   stringComVariosDigitos(66);
 }
-repassesComSucessoPorOrgao();
+//repassesComSucessoPorOrgao();
 function repassesComSucessoPorOrgao() {
   console.log('Repasses bem sucedidos por orgão:\n');
   for (let i = 0; i < listaDeOrgaosComSucesso.length; i++) {
@@ -156,13 +156,11 @@ function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
 const repassesAjustados = repassesGovTwist.filter(elemento => !(elemento.status === 'falha' && elemento.motivo === undefined));
 const repassesInvalidados = repassesGovTwist.filter(elemento => (elemento.status === 'falha' && elemento.motivo === undefined));
 
-// FUNÇÃO RECEBE ORGÃO ESCOLHIDO COMO ARGUMENTO E RETORNA UMA TABELA COM TODAS AS INFORMAÇÕES
 function resultadosValidos(campoOrgao) {
   console.log(`Quantidade de repasses: ${repassesGovTwist.length}`);
   console.log(`Quantidade de repasses ajustados(válidos): ${repassesAjustados.length}`);
   console.log('Transações inválidas removidas: ' + repassesInvalidados.length);
 
-  // FILTRANDO INFORMAÇÕES E GUARDANDO EM UMA ARRAY
   const listaDeOrgaoEscolhido = repassesAjustados.filter(filtrarOrgaoPorNome(campoOrgao));
   const numeroRepasses = listaDeOrgaoEscolhido.length;
   const valorTotal = listaDeOrgaoEscolhido.reduce(reduceSomarValores(), 0);
@@ -170,12 +168,9 @@ function resultadosValidos(campoOrgao) {
   const repassesInvalidos = listaDeOrgaoEscolhido.filter(filtrarPorStatus('falha'));
   const valorRepassesValidos = repassesValidos.reduce(reduceSomarValores(), 0);
   const valorRepassesInvalidos = repassesInvalidos.reduce(reduceSomarValores(), 0);
-
-  // ADICIONANDO PROPRIEDADES E VALORES À ARRAY (Informações adicionais ex: total, sucesso, falha)
+ 
   listaDeOrgaoEscolhido.push({ 'orgao': campoOrgao, 'repasses': numeroRepasses, 'sucesso': valorRepassesValidos, 'falha': valorRepassesInvalidos, 'total': valorTotal });
   console.log('Buscando informações sobre: ' + campoOrgao + '...');
-
-  // MOSTRANDO EM UMA TABELA DETALHADA
   console.table(listaDeOrgaoEscolhido);
 }
 
