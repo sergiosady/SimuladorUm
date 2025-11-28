@@ -12,30 +12,30 @@ const listaDeOrgaosComFalha = [
     repassesGov.filter(filtrarPorStatus('falha')).map(mapearOrgaos())
   )
 ];
-
-function totalDeRepasses() {
-  console.log(`Total de repasses processados: ${repassesGov.length}`);
-  stringComVariosDigitos(66);
+totalDeRepasses(repassesValidados)
+function totalDeRepasses(fonteDeDados) {
+  console.log(`Total de repasses processados: ${fonteDeDados.length}`);
+  stringComVariosTracos(66);
 }
 
 function repassesBemSucedidos() {
   console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(filtrarPorStatus('sucesso')).length}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //repassesComSucessoPorOrgao();
 function repassesComSucessoPorOrgao() {
   console.log('Repasses bem sucedidos por orgão:\n');
   for (let i = 0; i < listaDeOrgaosComSucesso.length; i++) {
     let totalDeRepassesPorOrgao = repassesGov.filter(elemento => elemento.status === "sucesso" && elemento.orgao === listaDeOrgaosComSucesso[i]).length;
-    console.log(`${listaDeOrgaosComSucesso[i]}: ${totalDeRepassesPorOrgao}`)
+    console.log(`${listaDeOrgaosComSucesso[i]}: ${totalDeRepassesPorOrgao}`);
   }
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //valorTotalEmRepassesValidos();
 function valorTotalEmRepassesValidos() {
   console.log(`Valor total: R$ ${repassesGov.filter(filtrarPorStatus('sucesso'))
     .reduce(reduceSomarValores(), 0).toFixed(2)}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //valorPorOrgaoSucesso();
 function valorPorOrgaoSucesso() {
@@ -44,12 +44,12 @@ function valorPorOrgaoSucesso() {
     console.log(`${listaDeOrgaosComSucesso[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === listaDeOrgaosComSucesso[i])
       .reduce(reduceSomarValores(), 0).toFixed(2)}`);
   }
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //repassesComFalha();
 function repassesComFalha() {
   console.log(`Total de repasses com falha: ${repassesGov.filter(filtrarPorStatus('falha')).length}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //quantidadeDeFalhasPorOrgao();
 function quantidadeDeFalhasPorOrgao() {
@@ -58,18 +58,18 @@ function quantidadeDeFalhasPorOrgao() {
     let total = repassesGov.filter(elemento => elemento.status === 'falha' && elemento.orgao === listaDeOrgaosComFalha[i]).length;
     console.log(`${listaDeOrgaosComFalha[i]}: ${total}`)
   }
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //totalFalhasComMotivo();
 function totalFalhasComMotivo() {
   console.log(`Total de falhas com motivo: ${repassesGov.filter(filtrarMotivos()).length}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //valorTotalEmFalhas();
 function valorTotalEmFalhas() {
   console.log(`Valor total em falhas: R$ ${repassesGov.filter(filtrarPorStatus('falha'))
     .reduce(reduceSomarValores(), 0).toFixed(2)}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //valorEmFalhasPorOrgao();
 function valorEmFalhasPorOrgao() {
@@ -78,13 +78,13 @@ function valorEmFalhasPorOrgao() {
     console.log(`${listaDeOrgaosComFalha[i]}: R$ ${repassesGov.filter(elemento => elemento.orgao === listaDeOrgaosComFalha[i])
       .reduce(reduceSomarValores(), 0).toFixed(2)}`);
   }
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 //valorEmFalhasComMotivo();
 function valorEmFalhasComMotivo() {
   console.log(`Valor total em falhas com motivo: R$ ${repassesGov.filter(filtrarMotivos())
     .reduce(reduceSomarValores(), 0).toFixed(2)}`);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
 }
 
 function repasseMaiorValor() {            // REQUISITOS HISTÓRIA 3
@@ -151,12 +151,15 @@ function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
     console.log("Nenhuma falha sem motivo encontrada. Lista livre de erros.");
   }
 }
-
+resultadosValidos('MEC');
 // REQUISITOS HISTÓRIA 6
-const repassesAjustados = repassesGovTwist.filter(elemento => !(elemento.status === 'falha' && elemento.motivo === undefined));
-const repassesInvalidados = repassesGovTwist.filter(elemento => (elemento.status === 'falha' && elemento.motivo === undefined));
+
 
 function resultadosValidos(campoOrgao) {
+  const repassesAjustados = repassesGovTwist.filter(elemento => !(elemento.status === 'falha' && elemento.motivo === undefined));
+  const repassesInvalidados = repassesGovTwist.filter(elemento => (elemento.status === 'falha' && elemento.motivo === undefined));
+  var repassesValidados = repassesAjustados;
+
   console.log(`Quantidade de repasses: ${repassesGovTwist.length}`);
   console.log(`Quantidade de repasses ajustados(válidos): ${repassesAjustados.length}`);
   console.log('Transações inválidas removidas: ' + repassesInvalidados.length);
@@ -168,7 +171,7 @@ function resultadosValidos(campoOrgao) {
   const repassesInvalidos = listaDeOrgaoEscolhido.filter(filtrarPorStatus('falha'));
   const valorRepassesValidos = repassesValidos.reduce(reduceSomarValores(), 0);
   const valorRepassesInvalidos = repassesInvalidos.reduce(reduceSomarValores(), 0);
- 
+
   listaDeOrgaoEscolhido.push({ 'orgao': campoOrgao, 'repasses': numeroRepasses, 'sucesso': valorRepassesValidos, 'falha': valorRepassesInvalidos, 'total': valorTotal });
   console.log('Buscando informações sobre: ' + campoOrgao + '...');
   console.table(listaDeOrgaoEscolhido);
@@ -204,24 +207,24 @@ function stringComVariosIguais(vezes) {
   console.log('='.repeat(vezes));
 }
 
-function stringComVariosDigitos(vezes) {
+function stringComVariosTracos(vezes) {
   console.log('-'.repeat(vezes));
 }
 
-//ESTRUTURA DE HISTÓRIAS
+//ESTRUTURA VISUAL DAS HISTÓRIAS
 function historiaUm() {
   stringComVariosIguais(66);
   console.log('* História de Usuário 1: Recebimento e Exibição de Dados do Governo');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   totalDeRepasses();
 }
 
 function historiaDois() {
   stringComVariosIguais(66);
-  console.log('* História de Usuário 2: Análise de Transações por status');
+  console.log('* História de Usuário 2: Análise de Transações Por Status');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   repassesBemSucedidos();
   repassesComSucessoPorOrgao();
   valorTotalEmRepassesValidos();
@@ -236,9 +239,9 @@ function historiaDois() {
 
 function historiaTres() {
   stringComVariosIguais(66);
-  console.log('* História de Usuário 3: Estatísticas de Repasses por critérios');
+  console.log('* História de Usuário 3: Estatísticas de Repasses Por Critérios');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   repasseMaiorValor();
   repasseMenorValor();
   diaComMaisRepasses();
@@ -250,25 +253,25 @@ function historiaTres() {
 
 function historiaQuatro(campoOrgao) {
   stringComVariosIguais(66);
-  console.log('* História de Usuário 4: Apresentação Automática de Detalhes');
+  console.log('* História de Usuário 4: Apresentação Automática De Detalhes');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   pesquisaPorOrgao(campoOrgao);
 }
 
 function historiaCinco() {
   stringComVariosIguais(66);
-  console.log('* História de Usuário 5: Tratamento de erros');
+  console.log('* História de Usuário 5: Tratamento De Erros');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   transacoesInvalidas();
 }
 
 function historiaSeis(campoOrgao) {
   stringComVariosIguais(66);
-  console.log('* História de Usuário 6: Ajustes nas estatísticas');
+  console.log('* História de Usuário 6: Ajustes Nas Estatísticas');
   stringComVariosIguais(66);
-  stringComVariosDigitos(66);
+  stringComVariosTracos(66);
   resultadosValidos(campoOrgao);
 }
 

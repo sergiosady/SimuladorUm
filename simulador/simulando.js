@@ -1,7 +1,5 @@
 import { historiaUm, historiaDois, historiaTres, historiaQuatro, historiaCinco, historiaSeis } from '../logica/scripts.js';
 
-  //Execução do simulador nível 1.
-
 simuladorNivelUm();                  
 
 async function simuladorNivelUm() {  
