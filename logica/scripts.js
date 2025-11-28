@@ -1,5 +1,6 @@
 const repassesGov = require('../data/dados-gov.json');
 const repassesGovTwist = require('../data/dados-gov-twist.json');
+const repassesValidados = repassesGovTwist.filter(elemento => !(elemento.status === 'falha' && elemento.motivo === undefined));const repassesProntos = repassesValidados;
 
 const listaDeOrgaosComSucesso = [         // REQUISITOS HISTÓRIAS 1 & 2
   ...new Set(
@@ -12,14 +13,14 @@ const listaDeOrgaosComFalha = [
     repassesGov.filter(filtrarPorStatus('falha')).map(mapearOrgaos())
   )
 ];
-totalDeRepasses(repassesValidados)
-function totalDeRepasses(fonteDeDados) {
-  console.log(`Total de repasses processados: ${fonteDeDados.length}`);
+
+function totalDeRepasses(repassesDoGoverno) {
+  console.log(`Total de repasses processados: ${repassesDoGoverno.length}`);
   stringComVariosTracos(66);
 }
 
-function repassesBemSucedidos() {
-  console.log(`Total de repasses bem sucedidos: ${repassesGov.filter(filtrarPorStatus('sucesso')).length}`);
+function repassesBemSucedidos(repassesDoGoverno) {
+  console.log(`Total de repasses bem sucedidos: ${repassesDoGoverno.filter(filtrarPorStatus('sucesso')).length}`);
   stringComVariosTracos(66);
 }
 //repassesComSucessoPorOrgao();
@@ -140,7 +141,6 @@ function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
   const listaDeInvalidos = repassesGovTwist.filter(elemento => elemento.status === 'falha' && (elemento.motivo === undefined));
   const valorTotal = listaDeInvalidos.reduce(reduceSomarValores(), 0);
   const quantidadeRepasses = listaDeInvalidos.length;
-  const valorInvalidos = listaDeInvalidos
 
   listaDeInvalidos.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
   console.log('Buscando transações inválidas(Sem motivo)...');
@@ -151,17 +151,15 @@ function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
     console.log("Nenhuma falha sem motivo encontrada. Lista livre de erros.");
   }
 }
-resultadosValidos('MEC');
+//resultadosValidos('Polícia Civil');
 // REQUISITOS HISTÓRIA 6
 
-
+resultadosValidos('MEC')
 function resultadosValidos(campoOrgao) {
-  const repassesAjustados = repassesGovTwist.filter(elemento => !(elemento.status === 'falha' && elemento.motivo === undefined));
   const repassesInvalidados = repassesGovTwist.filter(elemento => (elemento.status === 'falha' && elemento.motivo === undefined));
-  var repassesValidados = repassesAjustados;
 
   console.log(`Quantidade de repasses: ${repassesGovTwist.length}`);
-  console.log(`Quantidade de repasses ajustados(válidos): ${repassesAjustados.length}`);
+  console.log(`Quantidade de repasses ajustada(repasses válidos): ${repassesProntos.length}`);
   console.log('Transações inválidas removidas: ' + repassesInvalidados.length);
 
   const listaDeOrgaoEscolhido = repassesAjustados.filter(filtrarOrgaoPorNome(campoOrgao));
@@ -173,7 +171,7 @@ function resultadosValidos(campoOrgao) {
   const valorRepassesInvalidos = repassesInvalidos.reduce(reduceSomarValores(), 0);
 
   listaDeOrgaoEscolhido.push({ 'orgao': campoOrgao, 'repasses': numeroRepasses, 'sucesso': valorRepassesValidos, 'falha': valorRepassesInvalidos, 'total': valorTotal });
-  console.log('Buscando informações sobre: ' + campoOrgao + '...');
+  console.log(`Buscando informações sobre: ${campoOrgao}...`);
   console.table(listaDeOrgaoEscolhido);
 }
 
@@ -217,7 +215,7 @@ function historiaUm() {
   console.log('* História de Usuário 1: Recebimento e Exibição de Dados do Governo');
   stringComVariosIguais(66);
   stringComVariosTracos(66);
-  totalDeRepasses();
+  totalDeRepasses(repassesGov);
 }
 
 function historiaDois() {
@@ -266,13 +264,15 @@ function historiaCinco() {
   stringComVariosTracos(66);
   transacoesInvalidas();
 }
-
+//historiaSeis();
 function historiaSeis(campoOrgao) {
   stringComVariosIguais(66);
   console.log('* História de Usuário 6: Ajustes Nas Estatísticas');
   stringComVariosIguais(66);
   stringComVariosTracos(66);
   resultadosValidos(campoOrgao);
+  
+  
 }
 
 module.exports = {
