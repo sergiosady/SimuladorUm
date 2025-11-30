@@ -18,13 +18,22 @@ function quantidadeRepassesPorStatus(repassesDoGoverno, status) {
   }
 }
 
-function repassesComSucessoPorOrgao(repassesDoGoverno) {
-  console.log('Repasses bem sucedidos por órgão:\n');
-  for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso').length; i++) {
-    let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === 'sucesso' && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso')[i]).length;
-    console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso')[i]}: ${totalDeRepassesPorOrgao}`);
+function repassesDeStatusPorOrgao(repassesDoGoverno, status) {
+  if (status === 'sucesso') {
+    console.log('Repasses bem sucedidos por órgão:\n');
+    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, status).length; i++) {
+      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]).length;
+      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]}: ${totalDeRepassesPorOrgao}`);
+    }
+    stringDeRepeticao('-', 66)
+  } else {
+    console.log('Repasses com falha por órgão:\n');
+    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, status).length; i++) {
+      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]).length;
+      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]}: ${totalDeRepassesPorOrgao}`);
+    }
+    stringDeRepeticao('-', 66)
   }
-  stringDeRepeticao('-', 66)
 }
 
 function valorTotalDeRepassesPorStatus(repassesDoGoverno, status) {
@@ -55,15 +64,6 @@ function valorTotalPorOrgaoStatus(repassesDoGoverno, status) {
     }
     stringDeRepeticao('-', 66);
   }
-}
-
-function quantidadeDeFalhasPorOrgao(repassesDoGoverno) {
-  console.log('Repasses com falha por órgão:\n')
-  for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha').length; i++) {
-    let total = repassesDoGoverno.filter(elemento => elemento.status === 'falha' && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha')[i]).length;
-    console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha')[i]}: ${total}`)
-  }
-  stringDeRepeticao('-', 66);
 }
 
 function totalFalhasComMotivo(repassesDoGoverno) {
@@ -126,14 +126,14 @@ function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //REQUISI
   console.table(listaDeOrgaoEscolhido);
 }
 
-function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
-  const listaDeInvalidos = repassesGovTwist.filter(elemento => elemento.status === 'falha' && (elemento.motivo === undefined));
+function transacoesInvalidas(repassesDoGoverno) {          // REQUISITOS HISTÓRIA 5
+  const listaDeInvalidos = repassesDoGoverno.filter(elemento => elemento.status === 'falha' && (elemento.motivo === undefined));
   const valorTotal = listaDeInvalidos.reduce(reduceSomarValores(), 0);
   const quantidadeRepasses = listaDeInvalidos.length;
 
   listaDeInvalidos.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
   console.log('Buscando transações inválidas(Sem motivo)...');
-  if (listaDeInvalidos.length > 0) {
+  if (listaDeInvalidos.length > 1) {
     console.log('Tabela de transações inválidas:');
     console.table(listaDeInvalidos);
   } else {
@@ -142,8 +142,8 @@ function transacoesInvalidas() {          // REQUISITOS HISTÓRIA 5
 }
 
 // REQUISITOS HISTÓRIA 6
-resultadosValidos('MEC')
-function resultadosValidos(campoOrgao) {
+resultadosValidos()
+function resultadosValidos() {
   console.log(`Quantidade de repasses: ${repassesGovTwist.length}`);
   stringDeRepeticao('-', 66);
   console.log(`Quantidade de repasses válidos: ${repassesValidados.length}`);
@@ -151,7 +151,7 @@ function resultadosValidos(campoOrgao) {
   console.log('Transações inválidas removidas: ' + repassesInvalidados.length);
   stringDeRepeticao('-', 66);
   quantidadeRepassesPorStatus(repassesValidados, 'sucesso');
-  repassesComSucessoPorOrgao(repassesValidados);
+  repassesDeStatusPorOrgao(repassesValidados, 'sucesso');
   valorTotalDeRepassesPorStatus(repassesValidados, 'sucesso');
   valorTotalPorOrgaoStatus(repassesValidados, 'sucesso');
   quantidadeRepassesPorStatus(repassesValidados, 'falha');
@@ -165,17 +165,13 @@ function resultadosValidos(campoOrgao) {
 function listarOrgaosUnicosPorStatus(repassesDoGoverno, status) {
   return listaDeOrgaosComSucesso = [
     ...new Set(
-      repassesDoGoverno.filter(filtrarPorStatus(status)).map(mapearOrgaos())
+      repassesDoGoverno.filter(filtrarPorStatus(status)).map(elemento => elemento.orgao)
     )
   ];
 }
 
 function filtrarOrgaoPorNome(campoOrgao) {
   return elemento => elemento.orgao === campoOrgao;
-}
-
-function mapearOrgaos() {
-  return elemento => elemento.orgao;
 }
 
 function ordenarDrescente(repassesDoGoverno, propriedade) {
@@ -213,11 +209,11 @@ function historiaDois() {
   stringDeRepeticao('=', 66);
   stringDeRepeticao('-', 66);
   quantidadeRepassesPorStatus(repassesGov, 'sucesso');
-  repassesComSucessoPorOrgao(repassesGov);
+  repassesDeStatusPorOrgao(repassesGov, 'sucesso');
   valorTotalDeRepassesPorStatus(repassesGov, 'sucesso');
   valorTotalPorOrgaoStatus(repassesGov, 'sucesso');
   quantidadeRepassesPorStatus(repassesGov, 'falha');
-  quantidadeDeFalhasPorOrgao(repassesGov);
+  repassesDeStatusPorOrgao(repassesGov, 'falha');
   totalFalhasComMotivo(repassesGov);
   valorTotalDeRepassesPorStatus(repassesGov, 'falha');
   valorTotalPorOrgaoStatus(repassesGov, 'falha');
@@ -246,20 +242,20 @@ function historiaQuatro(campoOrgao) {
   pesquisaAutomaticaPorOrgao(repassesGovTwist, campoOrgao);
 }
 
-function historiaCinco() {
+function historiaCinco(repassesDoGoverno) {
   stringDeRepeticao('=', 66);
   console.log('* História de Usuário 5: Tratamento De Erros');
   stringDeRepeticao('=', 66);
   stringDeRepeticao('-', 66);
-  transacoesInvalidas();
+  transacoesInvalidas(repassesDoGoverno);
 }
 
-function historiaSeis(campoOrgao) {
+function historiaSeis() {
   stringDeRepeticao('=', 66);
   console.log('* História de Usuário 6: Ajustes Nas Estatísticas');
   stringDeRepeticao('=', 66);
   stringDeRepeticao('-', 66);
-  resultadosValidos(campoOrgao);
+  resultadosValidos();
 }
 
 module.exports = {
