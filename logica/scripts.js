@@ -210,19 +210,31 @@ function quantidadeFalhasPorMotivo(repassesDoGoverno) {
   }
   stringDeRepeticao('-', 66);
 }
-
+pesquisaAutomaticaPorOrgao(repassesGovTwist, 'MEC');
 function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //H4 - PLOT TWIST (Uso de dados inválidos)
   const listaDeOrgaoEscolhido = repassesDoGoverno.filter(filtrarOrgaoPorNome(campoOrgao));
   const numeroRepasses = listaDeOrgaoEscolhido.length;
   const valorTotal = listaDeOrgaoEscolhido.reduce(reduceSomarValores(), 0);
   const repassesComSucesso = listaDeOrgaoEscolhido.filter(filtrarPorStatus('sucesso'));
+  const quantidadeRepassesComSucesso = repassesComSucesso.length;
   const repassesComFalha = listaDeOrgaoEscolhido.filter(filtrarPorStatus('falha'));
+  const quantidadeRepassesComFalha = repassesComFalha.length;
   const valorEmRepassesDeSucesso = repassesComSucesso.reduce(reduceSomarValores(), 0);
   const valorEmRepassesComFalha = repassesComFalha.reduce(reduceSomarValores(), 0);
-  const tabelaResumo = [...listaDeOrgaoEscolhido];
 
-  tabelaResumo.push({ 'orgao': 'RESUMO', 'repasses': numeroRepasses, 'sucesso': valorEmRepassesDeSucesso, 'falha': valorEmRepassesComFalha, 'total': valorTotal });
+  const tabelaResumo = {
+    'orgao': campoOrgao,
+    'repasses': numeroRepasses,
+    'repasses com sucesso': quantidadeRepassesComSucesso,
+    'repasses com falha': quantidadeRepassesComFalha,
+    'valor total sucesso': valorEmRepassesDeSucesso,
+    'valor total falha': valorEmRepassesComFalha,
+    'valor total': valorTotal
+  };
+
   console.log(`Buscando informações sobre: ${campoOrgao}...`);
+  console.table(listaDeOrgaoEscolhido);
+  console.log(`Resumo:`)
   console.table(tabelaResumo);
 }
 
