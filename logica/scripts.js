@@ -19,18 +19,19 @@ function quantidadeRepassesPorStatus(repassesDoGoverno, status) {
 }
 
 function repassesPorStatusCadaOrgao(repassesDoGoverno, status) {
+  const orgaosUnicos = listarOrgaosUnicosPorStatus(repassesDoGoverno, status);
   if (status === 'sucesso') {
     console.log('Repasses bem sucedidos por órgão:\n');
-    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, status).length; i++) {
-      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]).length;
-      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]}: ${totalDeRepassesPorOrgao}`);
+    for (let i = 0; i < orgaosUnicos.length; i++) {
+      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === orgaosUnicos[i]).length;
+      console.log(`${orgaosUnicos[i]}: ${totalDeRepassesPorOrgao}`);
     }
     stringDeRepeticao('-', 66)
   } else {
     console.log('Repasses com falha por órgão:\n');
-    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, status).length; i++) {
-      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]).length;
-      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]}: ${totalDeRepassesPorOrgao}`);
+    for (let i = 0; i < orgaosUnicos.length; i++) {
+      let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === status && elemento.orgao === orgaosUnicos[i]).length;
+      console.log(`${orgaosUnicos[i]}: ${totalDeRepassesPorOrgao}`);
     }
     stringDeRepeticao('-', 66)
   }
@@ -49,19 +50,20 @@ function valorTotalDeRepassesPorStatus(repassesDoGoverno, status) {
 }
 
 function valorTotalCadaOrgaoPorStatus(repassesDoGoverno, status) {
+  const orgaosUnicos = listarOrgaosUnicosPorStatus(repassesDoGoverno, status);
   if (status === 'sucesso') {
     console.log('Valor por órgão com sucesso:\n')
-    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, status).length; i++) {
-      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i]}: R$ ${repassesDoGoverno
-        .filter(elemento => elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, status)[i] && elemento.status === status)
+    for (let i = 0; i < orgaosUnicos.length; i++) {
+      console.log(`${orgaosUnicos[i]}: R$ ${repassesDoGoverno
+        .filter(elemento => elemento.orgao === orgaosUnicos[i] && elemento.status === status)
         .reduce(reduceSomarValores(), 0).toFixed(2)}`);
     }
     stringDeRepeticao('-', 66);
   } else {
     console.log('Valor total de repasses com falha por órgão:\n')
-    for (let i = 0; i < listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha').length; i++) {
-      console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha')[i]}: R$ ${repassesDoGoverno
-        .filter(elemento => elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha')[i] && elemento.status === 'falha')
+    for (let i = 0; i < orgaosUnicos.length; i++) {
+      console.log(`${orgaosUnicos[i]}: R$ ${repassesDoGoverno
+        .filter(elemento => elemento.orgao === orgaosUnicos[i] && elemento.status === 'falha')
         .reduce(reduceSomarValores(), 0).toFixed(2)}`);
     }
     stringDeRepeticao('-', 66);
@@ -73,12 +75,12 @@ function totalFalhasComMotivo(repassesDoGoverno) {
   stringDeRepeticao('-', 66);
 }
 
-
 function valorTotalPorCadaMotivo(repassesDoGoverno) {
+  const motivosUnicos = listarMotivosUnicos(repassesDoGoverno);
   console.log('Valor total por cada motivo de falha:\n');
-  for (i = 0; i < listarMotivosUnicos(repassesDoGoverno).length; i++) {
-    console.log(`${listarMotivosUnicos(repassesDoGoverno)[i]}: R$ ${repassesDoGoverno
-      .filter(elemento => elemento.motivo === listarMotivosUnicos(repassesDoGoverno)[i])
+  for (let i = 0; i < motivosUnicos.length; i++) {
+    console.log(`${motivosUnicos[i]}: R$ ${repassesDoGoverno
+      .filter(elemento => elemento.motivo === motivosUnicos[i])
       .reduce(reduceSomarValores(), 0).toFixed(2)}`);
   }
   stringDeRepeticao('-', 66);
@@ -100,7 +102,6 @@ function repasseMenorValor(repassesDoGoverno) {
 function diaComMaisRepasses(repassesDoGoverno) {
   console.log("Dia(s) com mais repasses:\n");
   const listaDeDatas = filtrarDatasUnicas(repassesDoGoverno);
-
   let maiorQuantidade = 0;
   let diasComMais = [];
 
@@ -123,7 +124,6 @@ function diaComMaisRepasses(repassesDoGoverno) {
 function orgaoMaisRepasses(repassesDoGoverno) {
   console.log("Órgão(s) com mais repasses:\n");
   const listaDeOrgaos = listarOrgaosUnicos(repassesDoGoverno);
-
   let maiorQuantidade = 0;
   let orgaoComMais = [];
 
@@ -146,7 +146,6 @@ function orgaoMaisRepasses(repassesDoGoverno) {
 function maiorOrgaoPorSucesso(repassesDoGoverno) {
   console.log("Órgão(s) com mais repasses bem sucedidos:\n");
   const listaDeOrgaos = listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso');
-
   let maiorQuantidade = 0;
   let orgaosComMais = [];
 
@@ -169,7 +168,6 @@ function maiorOrgaoPorSucesso(repassesDoGoverno) {
 function maiorOrgaoPorFalha(repassesDoGoverno) {
   console.log("Órgão(s) com mais repasses falhados:\n");
   const listaDeOrgaos = listarOrgaosUnicosPorStatus(repassesDoGoverno, 'falha');
-
   let maiorQuantidade = 0;
   let orgaosComMais = [];
 
@@ -192,7 +190,6 @@ function maiorOrgaoPorFalha(repassesDoGoverno) {
 function quantidadeFalhasPorMotivo(repassesDoGoverno) {
   console.log("Motivo(s) de falha com mais repasses:\n");
   const motivosUnicos = listarMotivosUnicos(repassesDoGoverno);
-
   let maiorQuantidade = 0;
   let motivosComMais = [];
 
@@ -213,7 +210,7 @@ function quantidadeFalhasPorMotivo(repassesDoGoverno) {
   }
   stringDeRepeticao('-', 66);
 }
-
+pesquisaAutomaticaPorOrgao(repassesGovTwist, 'MEC');
 function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //H4 - PLOT TWIST (Uso de dados inválidos)
   const listaDeOrgaoEscolhido = repassesDoGoverno.filter(filtrarOrgaoPorNome(campoOrgao));
   const numeroRepasses = listaDeOrgaoEscolhido.length;
@@ -233,16 +230,15 @@ function transacoesInvalidas(repassesDoGoverno) {          //H5
   const valorTotal = listaDeInvalidos.reduce(reduceSomarValores(), 0);
   const quantidadeRepasses = listaDeInvalidos.length;
 
-  listaDeInvalidos.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
   console.log('Buscando transações inválidas(Sem motivo)...');
-  if (listaDeInvalidos.length > 1) {
+  if (listaDeInvalidos.length > 0) {
+    listaDeInvalidos.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
     console.log('Tabela de transações inválidas:');
     console.table(listaDeInvalidos);
   } else {
     console.log("Nenhuma falha sem motivo encontrada. Lista livre de erros.");
   }
 }
-
 
 function resultadosValidos(campoOrgao) {                   //H6
   console.log(`Quantidade de repasses: ${repassesGovTwist.length} `);
@@ -273,7 +269,7 @@ function resultadosValidos(campoOrgao) {                   //H6
 
 //FUNÇÕES AUXILIARES
 function filtrarDatasUnicas(repassesDoGoverno) {
-  return listaDeDatas = [
+  return [
     ...new Set(
       repassesDoGoverno.map(elemento => elemento.data)
     )
@@ -281,14 +277,14 @@ function filtrarDatasUnicas(repassesDoGoverno) {
 }
 
 function listarOrgaosUnicos(repassesDoGoverno) {
-  return listaDeOrgaos = [
+  return [
     ...new Set(
       repassesDoGoverno.map(elemento => elemento.orgao)
     )
   ]
 }
 function listarOrgaosUnicosPorStatus(repassesDoGoverno, status) {
-  return listaDeOrgaosUnicosPorStatus = [
+  return [
     ...new Set(
       repassesDoGoverno.filter(filtrarPorStatus(status)).map(elemento => elemento.orgao)
     )
@@ -296,7 +292,7 @@ function listarOrgaosUnicosPorStatus(repassesDoGoverno, status) {
 }
 
 function listarMotivosUnicos(repassesDoGoverno) {
-  return listaDeMotivos = [
+  return [
     ...new Set(
       repassesDoGoverno.filter(elemento => elemento.status === 'falha' && elemento.motivo).map(elemento => elemento.motivo)
     )
