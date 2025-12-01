@@ -225,7 +225,7 @@ function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //H4 - PL
   console.log(`Buscando informações sobre: ${campoOrgao}...`);
   console.table(tabelaResumo);
 }
-
+transacoesInvalidas(repassesGovTwist);
 function transacoesInvalidas(repassesDoGoverno) {          //H5
   const listaDeInvalidos = repassesDoGoverno.filter(elemento => elemento.status === 'falha' && (elemento.motivo === undefined));
   const valorTotal = listaDeInvalidos.reduce(reduceSomarValores(), 0);
@@ -233,9 +233,11 @@ function transacoesInvalidas(repassesDoGoverno) {          //H5
 
   console.log('Buscando transações inválidas(Sem motivo)...');
   if (listaDeInvalidos.length > 0) {
-    listaDeInvalidos.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
+    tabelaResumo = [...listaDeInvalidos];
+    tabelaResumo.push({ 'repasses': quantidadeRepasses, 'total': valorTotal });
+    
     console.log('Tabela de transações inválidas:');
-    console.table(listaDeInvalidos);
+    console.table(tabelaResumo);
   } else {
     console.log("Nenhuma falha sem motivo encontrada. Lista livre de erros.");
   }
