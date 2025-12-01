@@ -219,10 +219,11 @@ function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //H4 - PL
   const repassesComFalha = listaDeOrgaoEscolhido.filter(filtrarPorStatus('falha'));
   const valorEmRepassesDeSucesso = repassesComSucesso.reduce(reduceSomarValores(), 0);
   const valorEmRepassesComFalha = repassesComFalha.reduce(reduceSomarValores(), 0);
+  const tabelaResumo = [...listaDeOrgaoEscolhido];
 
-  listaDeOrgaoEscolhido.push({ 'orgao': campoOrgao, 'repasses': numeroRepasses, 'sucesso': valorEmRepassesDeSucesso, 'falha': valorEmRepassesComFalha, 'total': valorTotal });
+  tabelaResumo.push({ 'orgao': 'RESUMO', 'repasses': numeroRepasses, 'sucesso': valorEmRepassesDeSucesso, 'falha': valorEmRepassesComFalha, 'total': valorTotal });
   console.log(`Buscando informações sobre: ${campoOrgao}...`);
-  console.table(listaDeOrgaoEscolhido);
+  console.table(tabelaResumo);
 }
 
 function transacoesInvalidas(repassesDoGoverno) {          //H5
