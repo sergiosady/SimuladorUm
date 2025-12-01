@@ -210,7 +210,7 @@ function quantidadeFalhasPorMotivo(repassesDoGoverno) {
   }
   stringDeRepeticao('-', 66);
 }
-pesquisaAutomaticaPorOrgao(repassesGovTwist, 'MEC');
+
 function pesquisaAutomaticaPorOrgao(repassesDoGoverno, campoOrgao) {   //H4 - PLOT TWIST (Uso de dados inválidos)
   const listaDeOrgaoEscolhido = repassesDoGoverno.filter(filtrarOrgaoPorNome(campoOrgao));
   const numeroRepasses = listaDeOrgaoEscolhido.length;
