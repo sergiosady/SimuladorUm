@@ -24,7 +24,7 @@ function repassesComSucessoPorOrgao(repassesDoGoverno) {
     let totalDeRepassesPorOrgao = repassesDoGoverno.filter(elemento => elemento.status === 'sucesso' && elemento.orgao === listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso')[i]).length;
     console.log(`${listarOrgaosUnicosPorStatus(repassesDoGoverno, 'sucesso')[i]}: ${totalDeRepassesPorOrgao}`);
   }
-  stringDeRepeticao('-', 66)
+  stringDeRepeticao('-', 66);
 }
 
 function valorTotalDeRepassesPorStatus(repassesDoGoverno, status) {
